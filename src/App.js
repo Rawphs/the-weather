@@ -26,7 +26,6 @@ class App extends Component {
 
   componentDidMount () {
     if (navigator.geolocation) {
-      console.log('location');
       navigator.geolocation.getCurrentPosition(async ({ coords }) => {
         if (coords) {
           const response = await apiService.fetchForecastByCoords({ coords });
