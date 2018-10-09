@@ -73,7 +73,7 @@ class AutosuggestInput extends Component {
   render () {
     const inputProps = {
       classes    : this.props.classes,
-      placeholder: 'Amsterdam',
+      label: 'Search',
       value      : this.state.value,
       onChange   : (e, { newValue }) => this.onChange(e, { newValue }),
     };
