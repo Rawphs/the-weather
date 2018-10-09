@@ -24,24 +24,31 @@ class App extends Component {
     country : '',
   };
 
+  async getPositionSuccess (coords) {
+    if (coords) {
+      const response = await apiService.fetchForecastByCoords({ coords });
+
+      this.handleResponse(response);
+    }
+  }
+
   componentDidMount () {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async ({ coords }) => {
-        if (coords) {
-          const response = await apiService.fetchForecastByCoords({ coords });
-
-          if (response.cod === '200') {
-            this.setState({ ...this.parseResponse(response) });
-          }
-        }
-      }, console.log);
+      navigator.geolocation.getCurrentPosition(
+        ({coords}) => this.getPositionSuccess(coords),
+        () => this.onSelect('2759794')
+      );
     }
     else {
       console.log('Geolocation is not supported for this Browser/OS.');
     }
   }
 
-  parseResponse (response) {
+  handleResponse (response) {
+    if (response.cod !== '200') {
+      return;
+    }
+
     let parsed = {
       city: response.city.name,
       country: response.city.country,
@@ -66,15 +73,13 @@ class App extends Component {
       return prev;
     }, {});
 
-    return parsed;
+    this.setState({ ...parsed });
   }
 
   async onSelect (id) {
     const response = await apiService.fetchForecastById(id);
 
-    if (response.cod === '200') {
-      this.setState({ ...this.parseResponse(response) });
-    }
+    this.handleResponse(response);
   }
 
   renderTitle() {
