@@ -11,15 +11,17 @@ const styles = () => ({
     flexGrow: 1,
   },
   forecast: {
-    marginTop: 20,
+    marginTop   : 20,
+    marginBottom: 40,
+    width       : '100%',
   },
 });
 
 class App extends Component {
   state = {
-    forecast : null,
-    city: '',
-    country: '',
+    forecast: null,
+    city    : '',
+    country : '',
   };
 
   componentDidMount () {
@@ -109,7 +111,7 @@ class App extends Component {
 
   render () {
     return (
-      <div className={this.props.classes.root}>
+      <div>
         <AutosuggestInput onSelect={id => this.onSelect(id)} />
         {this.renderTitle()}
         {this.renderForecast()}

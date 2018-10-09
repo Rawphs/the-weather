@@ -1,6 +1,7 @@
 export default {
   container               : {
     position: 'relative',
+    margin: 30
   },
   suggestionsContainerOpen: {
     position : 'absolute',

@@ -1,6 +1,5 @@
 export default {
   card : {
-    maxWidth     : 345,
     display      : 'flex',
     flexDirection: 'row',
   },
