@@ -58,6 +58,7 @@ class App extends Component {
       prev[date].push({
         icon: current.weather[0].icon,
         ...current.main,
+        wind: current.wind,
         time: `${currentDate.getHours()}h`,
         date: currentDate,
       });
@@ -100,7 +101,7 @@ class App extends Component {
         {Object.keys(forecast).map(date => {
           return (
             <Grid item key={`card-${date}`}>
-              <WeatherCard {...forecast[date][0]} />
+              <WeatherCard forecast={forecast[date]} />
             </Grid>
           );
         })}
