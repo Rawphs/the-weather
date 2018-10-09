@@ -40,7 +40,7 @@ class App extends Component {
       );
     }
     else {
-      console.log('Geolocation is not supported for this Browser/OS.');
+      this.onSelect('2759794');
     }
   }
 
