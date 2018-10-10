@@ -19,6 +19,14 @@ class WeatherCard extends Component {
     }))
   };
 
+  /**
+   * Renders card's information item
+   *
+   * @param {string} label
+   * @param {string|number} value
+   * @param {string} unit
+   * @returns {Component}
+   */
   renderItem(label, value, unit = '') {
     return (
       <Typography component="p" variant="body2">
@@ -27,18 +35,39 @@ class WeatherCard extends Component {
     );
   }
 
+  /**
+   * Calculates minimum temperature for the day
+   *
+   * @returns {number}
+   */
   getMinTemp () {
     return this.props.forecast.reduce((min, data) => data.temp < min ? data.temp : min, this.props.forecast[0].temp);
   }
 
+  /**
+   * Calculates maximum temperature for the day
+   *
+   * @returns {number}
+   */
   getMaxTemp () {
     return this.props.forecast.reduce((max, p) => p.temp > max ? p.temp : max, this.props.forecast[0].temp);
   }
 
+  /**
+   * Calculates average temperature for the day
+   *
+   * @returns {string}
+   */
   getAverageTemp () {
     return (this.props.forecast.reduce((prev, current) => (prev + current.temp), 0) / this.props.forecast.length).toFixed(1);
   }
 
+  /**
+   * Calculates wind direction based on angle
+   *
+   * @param {number} deg
+   * @returns {string}
+   */
   getWindDirection (deg) {
     if (deg < 45) {
       return 'NE'

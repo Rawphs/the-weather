@@ -13,7 +13,13 @@ class App extends Component {
     country : '',
   };
 
-  async getPositionSuccess (coords) {
+  /**
+   * Fetches the forecast for given coordinates.
+   *
+   * @param {Object} coords
+   * @returns {Promise<void>}
+   */
+  async fetchByCoords (coords) {
     if (coords) {
       const response = await apiService.fetchForecastByCoords({ coords });
 
@@ -21,21 +27,44 @@ class App extends Component {
     }
   }
 
+  /**
+   * Fetches the forecast for given city id.
+   *
+   * @param {number} id
+   * @returns {Promise<void>}
+   */
+  async fetchById (id) {
+    const response = await apiService.fetchForecastById(id);
+
+    this.handleResponse(response);
+  }
+
+  /**
+   * Gets current position, if possible, and perform fetch accordingly.
+   */
   componentDidMount () {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        ({coords}) => this.getPositionSuccess(coords),
-        () => this.onSelect('2759794')
+        // If successful, uses coords
+        ({ coords }) => this.fetchByCoords(coords),
+        // otherwise falls back to Amsterdam's id
+        () => this.fetchById(2759794),
       );
     }
     else {
-      this.onSelect('2759794');
+      // Defaults to Amsterdam if geolocation is not available.
+      this.fetchById(2759794).then();
     }
   }
 
+  /**
+   * Formats api response and set state.
+   *
+   * @param {Object} response
+   */
   handleResponse (response) {
-    if (response.cod !== '200') {
-      return;
+    if (response.error || response.cod !== '200') {
+      return this.setState({ error: true });
     }
 
     let parsed = {
@@ -62,15 +91,14 @@ class App extends Component {
       return prev;
     }, {});
 
-    this.setState({ ...parsed });
+    this.setState({ ...parsed, error: false });
   }
 
-  async onSelect (id) {
-    const response = await apiService.fetchForecastById(id);
-
-    this.handleResponse(response);
-  }
-
+  /**
+   * Renders city name and country, if available.
+   *
+   * @returns {*}
+   */
   renderTitle() {
     if (!this.state.city) {
       return;
@@ -83,6 +111,28 @@ class App extends Component {
     );
   }
 
+  /**
+   * Renders error message.
+   *
+   * @returns {*}
+   */
+  renderError () {
+    if (!this.state.error) {
+      return;
+    }
+
+    return (
+      <Typography component="h4" variant="h4" align="center">
+        Uh-oh... Something went wrong with your request.
+      </Typography>
+    );
+  }
+
+  /**
+   * Renders forecast cards.
+   *
+   * @returns {*}
+   */
   renderForecast () {
     const { forecast } = this.state;
 
@@ -106,7 +156,8 @@ class App extends Component {
   render () {
     return (
       <div>
-        <AutosuggestInput onSelect={id => this.onSelect(id)} />
+        <AutosuggestInput onSelect={(id) => this.fetchById(id)} />
+        {this.renderError()}
         {this.renderTitle()}
         {this.renderForecast()}
       </div>

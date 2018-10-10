@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Paper, TextField, withStyles } from '@material-ui/core';
 import Autosuggest from 'react-autosuggest';
 import cityList from '../../cityList';
@@ -6,11 +7,21 @@ import Suggestion from '../Suggestion';
 import styles from './AutosuggestInput.styles';
 
 class AutosuggestInput extends Component {
+  static propTypes = {
+    onSelect: PropTypes.func.isRequired
+  };
+
   state = {
     value      : '',
     suggestions: [],
   };
 
+  /**
+   * Prepare suggestion list based on user's input
+   *
+   * @param {string} value
+   * @returns {Array}
+   */
   getSuggestions (value) {
     const input = value.trim().toLowerCase();
 
@@ -35,18 +46,37 @@ class AutosuggestInput extends Component {
     }
   }
 
+  /**
+   * Triggers select handling
+   *
+   * @param {event} event
+   * @param {Object} suggestionValue
+   */
   onSelect (event, { suggestionValue }) {
     this.setState({ value: suggestionValue.name });
     this.props.onSelect(suggestionValue.id);
   }
 
+  /**
+   * Sets state with user's input
+   *
+   * @param {event} event
+   * @param {string} newValue
+   */
   onChange (event, { newValue }) {
     if (typeof newValue !== 'string') {
       return;
     }
+
     this.setState({ value: newValue });
   };
 
+  /**
+   * Renders input field
+   *
+   * @param {Object} props
+   * @returns {Component}
+   */
   renderInput (props) {
     const { classes, ref, inputRef = () => {}, ...other } = props;
 
@@ -62,10 +92,25 @@ class AutosuggestInput extends Component {
     );
   }
 
+  /**
+   * Renders suggested city.
+   *
+   * @param {Object} suggestion
+   * @param {string} query
+   * @param {boolean} isHighlighted
+   * @returns {Component}
+   */
   renderSuggestion (suggestion, { query, isHighlighted }) {
     return <Suggestion isHighlighted={isHighlighted} query={query} suggestion={suggestion} />;
   }
 
+  /**
+   * Renders list of suggestions.
+   *
+   * @param {Object} containerProps
+   * @param {Component} children
+   * @returns {Component}
+   */
   renderSuggestionContainer ({ containerProps, children }) {
     return <Paper {...containerProps} square>{children}</Paper>;
   }

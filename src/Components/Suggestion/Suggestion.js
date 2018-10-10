@@ -11,6 +11,10 @@ export default class Suggestion extends Component {
     suggestion   : PropTypes.object.isRequired,
   };
 
+  /**
+   * Renders city name with highlighted characters
+   * @returns {Component}
+   */
   renderHighlightedText () {
     const { suggestion, query } = this.props;
 
