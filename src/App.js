@@ -4,18 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AutosuggestInput from './Components/AutosuggestInput';
 import WeatherCard from './Components/WeatherCard';
 import apiService from './Services/apiService';
-
-const styles = () => ({
-  root    : {
-    height  : 250,
-    flexGrow: 1,
-  },
-  forecast: {
-    marginTop   : 20,
-    marginBottom: 40,
-    width       : '100%',
-  },
-});
+import styles from './App.styles';
 
 class App extends Component {
   state = {
