@@ -9,25 +9,33 @@ class ApiService {
   }
 
   async fetchForecastById (id) {
-    const url      = this.getUrl('forecast');
-    const response = await fetch(`${url}&id=${id}`);
+    try {
+      const url      = this.getUrl('forecast');
+      const response = await fetch(`${url}&id=${id}`);
 
-    if (!response.ok) {
-      return console.log('error fetching stuff');
+      if (!response.ok) {
+        throw new Error(`Error fetching forecast. ID: ${id}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      return { error };
     }
-
-    return response.json();
   }
 
   async fetchForecastByCoords ({ coords }) {
-    const url      = this.getUrl('forecast');
-    const response = await fetch(`${url}&lat=${coords.latitude}&lon=${coords.longitude}`);
+    try {
+      const url      = this.getUrl('forecast');
+      const response = await fetch(`${url}&lat=${coords.latitude}&lon=${coords.longitude}`);
 
-    if (!response.ok) {
-      return console.log('error fetching stuff');
+      if (!response.ok) {
+        throw new Error(`Error fetching forecast. Coords: ${coords}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      return { error };
     }
-
-    return response.json();
   }
 }
 
