@@ -31,4 +31,4 @@ class ApiService {
   }
 }
 
-export default new ApiService('https://api.openweathermap.org/data/2.5', process.env.REACT_APP_API_KEY);
+export default new ApiService(process.env.REACT_APP_API_URL, process.env.REACT_APP_API_KEY);
